@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: setup Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
@@ -34,10 +34,10 @@ jobs:
           pip install -r requirements.txt
       - name: Ensure browsers are installed
         run: python -m playwright install --with-deps
-      - name: all_tests
+      - name: Run all tests
         if: ${{ github.event.inputs.deployment_target == 'all_tests' }}
         run: pytest --tracing=retain-on-failure --alluredir=allure-results
-      - name: smoke_tests
+      - name: Run smoke tests
         if: ${{ github.event.inputs.deployment_target == 'smoke_tests' }}
         run: pytest -m smoke --alluredir=allure-results
       - name: Store allure results
