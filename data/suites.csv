@@ -1,4 +1,4 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Sun Jun 15 22:20:58 UTC 2025","Sun Jun 15 22:21:01 UTC 2025","2237","tests","test_register","","","","test_register[chromium-testdata/valid_user_registration.json]",""
-"passed","Sun Jun 15 22:20:56 UTC 2025","Sun Jun 15 22:20:58 UTC 2025","2162","tests","test_products","","","","test_add_product_to_cart[chromium]",""
-"passed","Sun Jun 15 22:20:53 UTC 2025","Sun Jun 15 22:20:56 UTC 2025","2287","tests","test_login","","","","test_login_valid_credentials[chromium-testdata/valid_user_login.json]",""
+"passed","Sun Jun 15 22:39:32 UTC 2025","Sun Jun 15 22:39:34 UTC 2025","2584","tests","test_products","","","","test_add_product_to_cart[chromium]",""
+"passed","Sun Jun 15 22:39:34 UTC 2025","Sun Jun 15 22:39:36 UTC 2025","2222","tests","test_register","","","","test_register[chromium-testdata/valid_user_registration.json]",""
+"passed","Sun Jun 15 22:39:29 UTC 2025","Sun Jun 15 22:39:31 UTC 2025","2122","tests","test_login","","","","test_login_valid_credentials[chromium-testdata/valid_user_login.json]",""
