@@ -1,4 +1,4 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","1735","test_login_valid_credentials[chromium-testdata/valid_user_login.json]","tests","Sun Jun 15 21:53:50 UTC 2025","passed","Sun Jun 15 21:53:52 UTC 2025","","test_login","",""
-"","2059","test_add_product_to_cart[chromium]","tests","Sun Jun 15 21:53:52 UTC 2025","passed","Sun Jun 15 21:53:54 UTC 2025","","test_products","",""
-"","1898","test_register[chromium-testdata/valid_user_registration.json]","tests","Sun Jun 15 21:53:54 UTC 2025","passed","Sun Jun 15 21:53:56 UTC 2025","","test_register","",""
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Sun Jun 15 22:20:58 UTC 2025","Sun Jun 15 22:21:01 UTC 2025","2237","tests","test_register","","","","test_register[chromium-testdata/valid_user_registration.json]",""
+"passed","Sun Jun 15 22:20:56 UTC 2025","Sun Jun 15 22:20:58 UTC 2025","2162","tests","test_products","","","","test_add_product_to_cart[chromium]",""
+"passed","Sun Jun 15 22:20:53 UTC 2025","Sun Jun 15 22:20:56 UTC 2025","2287","tests","test_login","","","","test_login_valid_credentials[chromium-testdata/valid_user_login.json]",""
