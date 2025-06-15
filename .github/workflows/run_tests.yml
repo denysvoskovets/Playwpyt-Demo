@@ -46,14 +46,14 @@ jobs:
         if: ${{ github.event.inputs.deployment_target == 'smoke_tests' }}
         run: pytest -m smoke --alluredir=allure-results
 
-      - name: Upload allure results artifact
+      - name: Upload allure-results artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: allure-results
           retention-days: 1
 
-  generate-report:
+  generate-and-publish-report:
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -84,10 +84,6 @@ jobs:
           path: allure-report
           name: github-pages
 
-  publish-report:
-    runs-on: ubuntu-latest
-    needs: generate-report
-    steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v3
         with:
