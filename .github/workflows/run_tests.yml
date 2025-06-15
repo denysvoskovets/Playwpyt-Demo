@@ -30,10 +30,10 @@ jobs:
       - name: Ensure browsers are installed
         run: python -m playwright install --with-deps
       - name: all_tests
-        if: "github.event.inputs.deployment_target == 'all_tests'"
+        if: ${{ github.event.inputs.deployment_target == 'all_tests' }}
         run: pytest --tracing=retain-on-failure
       - name: smoke_tests
-        if: "github.event.inputs.deployment_target == 'smoke_tests'"
+        if: ${{ github.event.inputs.deployment_target == 'smoke_tests' }}
         run: pytest -m smoke
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
