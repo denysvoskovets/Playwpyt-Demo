@@ -1,4 +1,4 @@
-name: Run automated tests
+name: Run automated tests and publish Allure report
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
           - smoke_tests
 
 permissions:
-  contents: read
+  contents: write  # Required for gh-pages deployment
   pages: write
   id-token: write
 
@@ -25,7 +25,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
@@ -35,7 +35,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Ensure browsers are installed
+      - name: Install Playwright browsers
         run: python -m playwright install --with-deps
 
       - name: Run all tests
@@ -46,46 +46,27 @@ jobs:
         if: ${{ github.event.inputs.deployment_target == 'smoke_tests' }}
         run: pytest -m smoke --alluredir=allure-results
 
-      - name: Upload allure-results artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: allure-results
-          retention-days: 1
-
   generate-and-publish-report:
     runs-on: ubuntu-latest
     needs: test
+    name: Generate & Publish Allure Report
+
     steps:
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'microsoft'
-          java-version: '17'
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Install Allure CLI
+      - name: Install Allure CLI (via npm)
         run: |
-          wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
-          tar -zxvf allure-2.27.0.tgz -C /opt/
-          sudo ln -sf /opt/allure-2.27.0/bin/allure /usr/local/bin/allure
+          npm install -g allure-commandline
 
-      - name: Download allure-results artifact
-        uses: actions/download-artifact@v4
+      - name: Generate Allure Report
+        run: |
+          allure generate allure-results -o allure-report --clean
+
+      - name: Deploy Allure Report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: allure-results
-          path: allure-results
-
-      - name: Generate Allure HTML report
-        run: allure generate allure-results -o allure-report --clean
-
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: allure-report
-          name: github-pages
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v3
-        with:
-          artifact_name: github-pages
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          publish_branch: gh-pages
+          keep_files: false
