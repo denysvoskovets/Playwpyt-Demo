@@ -1,4 +1,4 @@
-name: Run automated tests
+name: Run automated tests and publish Allure report
 
 on:
   workflow_dispatch:
@@ -13,9 +13,9 @@ on:
           - smoke_tests
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write      
+  pages: write         
+  id-token: write      
 
 jobs:
   test:
@@ -24,38 +24,43 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: setup Python
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Ensure browsers are installed
+
+      - name: Install Playwright browsers
         run: python -m playwright install --with-deps
-      - name: all_tests
+
+      - name: Run all tests
         if: ${{ github.event.inputs.deployment_target == 'all_tests' }}
         run: pytest --tracing=retain-on-failure --alluredir=allure-results
-      - name: smoke_tests
+
+      - name: Run smoke tests
         if: ${{ github.event.inputs.deployment_target == 'smoke_tests' }}
         run: pytest -m smoke --alluredir=allure-results
-      - name: Store allure results
+
+      - name: Upload Allure results
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: allure-results
           retention-days: 1
 
-
   generate-report:
     runs-on: ubuntu-latest
     needs: test
-    name: Generate run report
+    name: Generate & Publish Allure Report
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  
 
       - name: Download Allure results
         uses: actions/download-artifact@v4
@@ -65,22 +70,25 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          sudo wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
-          sudo tar -zxvf allure-2.27.0.tgz -C /opt/
+          wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+          tar -zxvf allure-2.27.0.tgz -C /opt/
           sudo ln -s /opt/allure-2.27.0/bin/allure /usr/bin/allure
 
-      - name: Build test report
-        uses: simple-elf/allure-report-action@v1.7
-        if: always()
-        with:
-          gh_pages: gh-pages
-          allure_history: allure-history
-          allure_results: allure-results
+      - name: Generate Allure report
+        run: |
+          allure generate allure-results -o allure-report --clean
+          if [ ! -f allure-report/index.html ]; then
+            echo "❌ Allure report was not generated properly!"
+            exit 1
+          fi
 
-      - name: Publish test report
+      - name: Add .nojekyll to fix GitHub Pages rendering
+        run: touch allure-report/.nojekyll
+
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
-        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-history
+          publish_dir: allure-report
+          keep_files: false
