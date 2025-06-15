@@ -13,7 +13,7 @@ on:
           - smoke_tests
 
 permissions:
-  contents: write  # Needed for gh-pages
+  contents: write
   pages: write
   id-token: write
 
@@ -74,19 +74,12 @@ jobs:
       - name: Show contents of allure-results
         run: ls -la allure-results
 
-      - name: Generate Allure HTML report
+      - name: Generate Allure Report
         run: |
           allure generate allure-results -o allure-report --clean
-          if [ ! -f allure-report/index.html ]; then
-            echo "❌ Allure report was not generated properly!"
-            exit 1
-          fi
 
-      - name: Upload generated report for debugging
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-report
-          path: allure-report
+      - name: Create .nojekyll file
+        run: touch allure-report/.nojekyll
 
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -95,3 +88,10 @@ jobs:
           publish_dir: ./allure-report
           publish_branch: gh-pages
           keep_files: false
+          force_orphan: true
+
+      - name: Show gh-pages branch contents after deploy
+        run: |
+          git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages-temp
+          ls -la gh-pages-temp
+          ls -la gh-pages-temp/allure-report || echo "No allure-report folder in gh-pages branch"
