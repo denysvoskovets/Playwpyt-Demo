@@ -14,7 +14,6 @@ from pages.register_page import RegisterPage
 # ------------------------------------------------------------
 
 
-
 # ------------------------------------------------------------
 # Pages fixtures
 # ------------------------------------------------------------
@@ -42,7 +41,6 @@ def register_page(page: Page) -> RegisterPage:
 @pytest.fixture
 def load_user_data(request):
     relative_path = request.param
-    # go one level up from tests/ folder to root
     file_path = Path(__file__).parent.parent / relative_path
 
     if not file_path.exists():
