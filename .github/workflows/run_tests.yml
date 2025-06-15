@@ -3,7 +3,7 @@ name: Run automated tests
 on:
   workflow_dispatch:
     inputs:
-      deployment-target:
+      deployment_target:
         description: Choose target
         required: true
         default:
