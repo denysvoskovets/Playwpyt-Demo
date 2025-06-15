@@ -3,6 +3,7 @@ from playwright.sync_api import Page, expect
 import utils.user_api_helper as user_api_helper
 import allure
 
+
 @pytest.fixture(autouse=True)
 def clean_user(page):
     user_api_helper.create_user_via_api()
@@ -10,6 +11,7 @@ def clean_user(page):
     cookies = page.context.cookies()
     user_api_helper.delete_account_from_session(cookies)
 
+@pytest.mark.smoke
 @allure.feature('Login Page')
 @pytest.mark.parametrize("load_user_data", ["testdata/valid_user_login.json"], indirect=True)
 def test_login_valid_credentials(page: Page, load_user_data, login_page):

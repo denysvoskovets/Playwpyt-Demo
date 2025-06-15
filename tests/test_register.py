@@ -10,6 +10,7 @@ def clean_user(page):
     cookies = page.context.cookies()
     user_api_helper.delete_account_from_session(cookies)
 
+@pytest.mark.smoke
 @allure.feature('Registration')
 @pytest.mark.parametrize("load_user_data", ["testdata/valid_user_registration.json"], indirect=True)
 def test_register(page, load_user_data, login_page, home_page, register_page):
