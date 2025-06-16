@@ -77,10 +77,6 @@ jobs:
       - name: Generate Allure report
         run: |
           allure generate allure-results -o allure-report --clean
-          if [ ! -f allure-report/index.html ]; then
-            echo "❌ Allure report was not generated properly!"
-            exit 1
-          fi
 
       - name: Add .nojekyll to fix GitHub Pages rendering
         run: touch allure-report/.nojekyll
