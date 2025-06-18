@@ -28,7 +28,6 @@ class RegisterPage(BasePage):
         self.mobile_number_input = page.locator('[data-qa="mobile_number"]')
         self.create_acc_button = page.locator('button[data-qa="create-account"]')
 
-
     def register_user(self, user_data: dict):
         with allure.step('Registrate user'):
             self.select_gender(user_data['title'])
@@ -36,9 +35,9 @@ class RegisterPage(BasePage):
             self.fill_input_email(user_data['email_address'])
             self.fill_input_password(user_data['password'])
             self.select_date_of_birth(
-                day = user_data['days'],
-                month= user_data['months'],
-                year = user_data['years']
+                day=user_data['days'],
+                month=user_data['months'],
+                year=user_data['years']
             )
             self.choose_newsletter(user_data)
             self.choose_option(user_data)
@@ -54,7 +53,6 @@ class RegisterPage(BasePage):
             self.fill_mobile_number(user_data['mobile_number'])
             self.create_acc_button.click()
             return HomePage(self.page)
-
 
     def select_gender(self, title: str):
         if title.lower() == 'mr':
@@ -78,11 +76,11 @@ class RegisterPage(BasePage):
         self.year_input.select_option(value=year)
 
     def choose_newsletter(self, user_data: dict):
-        if user_data.get('newsletter', True): #can do additional checks for value. But for this site it is redundant
+        if user_data.get('newsletter', True):  # can do additional checks for value. But for this site it is redundant
             self.letters_checkmark.check()
 
     def choose_option(self, user_data: dict):
-        if user_data.get('optin', True):  #the same
+        if user_data.get('optin', True):  # the same
             self.special_offers_checkmark.check()
 
     def fill_first_name(self, first_name: str):

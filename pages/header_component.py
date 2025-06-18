@@ -10,4 +10,3 @@ class Header:
 
     def navigate_to_products(self):
         self.products_button.cluck()
-
