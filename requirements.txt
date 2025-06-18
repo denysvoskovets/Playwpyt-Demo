@@ -19,3 +19,5 @@ requests==2.32.4
 text-unidecode==1.3
 typing_extensions==4.14.0
 urllib3==2.4.0
+typing_extensions~=4.14.0
+Faker~=37.4.0

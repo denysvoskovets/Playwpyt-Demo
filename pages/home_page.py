@@ -1,11 +1,11 @@
+from config import BASE_URL
 from pages.base_page import BasePage
 from pages.product_page import ProductPage
 import allure
 
 
 class HomePage(BasePage):
-
-    URL="https://www.automationexercise.com/"
+    URL = BASE_URL
 
     def __init__(self, page):
         super().__init__(page)
@@ -28,12 +28,9 @@ class HomePage(BasePage):
         with allure.step('Open First Product'):
             self.view_product_buttons.nth(0).click()
 
-
     def search_product(self, product_name: str):
         with allure.step(f'Search product {product_name}'):
             self.search_input.fill(product_name)
             self.submit_search_button.click()
             self.open_product()
         return ProductPage(self.page)
-
-

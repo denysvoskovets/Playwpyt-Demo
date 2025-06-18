@@ -7,11 +7,33 @@ from pages.home_page import HomePage
 from pages.login_page import LoginPage
 from pages.product_page import ProductPage
 from pages.register_page import RegisterPage
+from testdata.user_factory import UserFactory
+from utils.user_api_helper import create_user_via_api, delete_account_from_session
 
 
 # ------------------------------------------------------------
 # Setup Run
 # ------------------------------------------------------------
+
+@pytest.fixture
+def user_factory():
+    return UserFactory()
+
+@pytest.fixture
+def user_data(user_factory, request):
+    profile = getattr(request, "param", "normal")
+    return user_factory.build(profile)
+
+@pytest.fixture
+def test_user(user_data, page):
+    create_user_via_api(user_data)
+    yield user_data
+
+@pytest.fixture
+def clean_user(page):
+    yield
+    cookies = page.context.cookies()
+    delete_account_from_session(cookies)
 
 
 # ------------------------------------------------------------
@@ -22,13 +44,16 @@ from pages.register_page import RegisterPage
 def login_page(page: Page) -> LoginPage:
     return LoginPage(page)
 
+
 @pytest.fixture
 def home_page(page: Page) -> HomePage:
     return HomePage(page)
 
+
 @pytest.fixture
 def product_page(page: Page) -> ProductPage:
     return ProductPage(page)
+
 
 @pytest.fixture
 def register_page(page: Page) -> RegisterPage:
@@ -50,6 +75,3 @@ def load_user_data(request):
         data = json.load(f)
 
     return data
-
-
-
